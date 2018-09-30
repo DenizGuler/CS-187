@@ -21,6 +21,7 @@ public class InfixEvaluator extends Evaluator {
 	public void evaluate_step(String token) throws Exception {
 		if(isOperand(token)) {
 			// TODO: What do we do if the token is an operand?
+			operands.push(Integer.parseInt(token));
 		} else {
 			/* TODO: What do we do if the token is an operator?
 			   If the expression is invalid, make sure you throw
@@ -29,7 +30,33 @@ public class InfixEvaluator extends Evaluator {
 			   You can call precedence(token) to get the precedence
 			   value of an operator. It's already defined in 
 			   the Evaluator class.
-			 */ 
+			 */
+			switch (token){
+				case "(":
+					operators.push(token);
+					break;
+				case "+":
+				case "-":
+				case "*":
+				case "/":
+				case "!":
+					if (operators.isEmpty() || precedence(token) > precedence(operators.top()))
+						operators.push(token);
+					else {
+						while (!operators.isEmpty() && precedence(token) <= precedence(operators.top()))
+							process_operator();
+						operators.push(token);
+					}
+					break;
+				case ")":
+					while(!operators.isEmpty() && !operators.top().equals("("))
+						process_operator();
+					if (operators.isEmpty()) throw new Exception("missing (");
+					operators.pop();
+					break;
+				default:
+					throw new Exception("invalid operator");
+			}
 		}	
 	}
 	/** This method evaluates an infix expression (defined by expr)
@@ -43,6 +70,8 @@ public class InfixEvaluator extends Evaluator {
 		}
 		
 		/* TODO: what do we do after all tokens have been processed? */
+		while (!operators.isEmpty())
+			process_operator();
 		
 		// The operand stack should have exactly one operand after the evaluation is done
 		if(operands.size()>1)
@@ -55,5 +84,21 @@ public class InfixEvaluator extends Evaluator {
 	
 	public static void main(String[] args) throws Exception {
 		System.out.println(new InfixEvaluator().evaluate("5+(5+2*(5+9))/!8"));
+	}
+
+	private void process_operator () throws Exception {
+		String op = operators.pop();
+		int a , b ;
+		if (op.equals("!")) {
+			if (operands.isEmpty()) throw new Exception("too few operands");
+			a = operands.pop();
+			a *= -1;
+		} else {
+			if (operands.size() < 2) throw new Exception("too few operands");
+			b = operands.pop();
+			a = operands.pop();
+			a = PostfixEvaluator.do_operation(op, a, b);
+		}
+		operands.push(a);
 	}
 }

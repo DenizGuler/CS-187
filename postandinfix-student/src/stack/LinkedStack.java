@@ -7,6 +7,8 @@ package stack;
 public class LinkedStack<T> {
 	
 	// TODO: define class variables here
+	private LLNode<T> head;
+	private int size;
 
 	/**
 	 * Remove and return the top element on this stack.
@@ -14,7 +16,12 @@ public class LinkedStack<T> {
 	 */
 	public T pop() {
 		// TODO
-		return null;
+		if (this.isEmpty())
+			return null;
+		size--;
+		T elem = head.info;
+		head = head.link;
+		return elem;
 	}
 
 	/**
@@ -23,7 +30,9 @@ public class LinkedStack<T> {
 	 */
 	public T top() {
 		// TODO
-		return null;
+		if (this.isEmpty())
+			return null;
+		return head.info;
 	}
 
 	/**
@@ -31,7 +40,7 @@ public class LinkedStack<T> {
 	 */
 	public boolean isEmpty() {
 		// TODO
-		return true;
+		return size() == 0;
 	}
 
 	/**
@@ -39,7 +48,7 @@ public class LinkedStack<T> {
 	 */
 	public int size() {
 		// TODO
-		return 0;
+		return size;
 	}
 
 	/**
@@ -47,6 +56,10 @@ public class LinkedStack<T> {
 	 */
 	public void push(T elem) {
 		// TODO
+		LLNode<T> newNode = new LLNode<>(elem);
+		newNode.link = head;
+		head = newNode;
+		size++;
 	}
 
 }

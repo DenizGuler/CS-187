@@ -18,12 +18,26 @@ public class PostfixEvaluator extends Evaluator {
 	public void evaluate_step(String token) throws Exception {
 		if(isOperand(token)) {
 			// TODO: What do we do if the token is an operand?
+			stack.push(Integer.parseInt(token));
 		} else {
 			/* TODO: What do we do if the token is an operator?
 			   If the expression is invalid, make sure you throw
 			   an exception with the correct message
-			 */ 
-		}		
+			 */
+			int a, b;
+			if (token.equals("!")) {
+				if (stack.top() == null) throw new Exception("too few operands");
+				a = stack.pop();
+				a *= -1;
+			} else {
+				if (stack.size() < 2) throw new Exception("too few operands");
+				b = stack.pop();
+				a = stack.pop();
+				a = do_operation(token, a, b);
+			}
+			stack.push(a);
+
+		}
 	}
 	/** This method evaluates a postfix expression (defined by expr)
 	 *  and returns the evaluation result. It throws an Exception
@@ -45,5 +59,25 @@ public class PostfixEvaluator extends Evaluator {
 	
 	public static void main(String[] args) throws Exception {
 		System.out.println(new PostfixEvaluator().evaluate("50 25 ! / 3 +"));
+	}
+	static int do_operation(String op, int a, int b) throws Exception {
+		switch (op) {
+			case "+":
+				a += b;
+				break;
+			case "-":
+				a -= b;
+				break;
+			case "*":
+				a *= b;
+				break;
+			case "/":
+				if (b == 0) throw new Exception("division by zero");
+				a /= b;
+				break;
+			default:
+				throw new Exception("invalid operator");
+		}
+		return a;
 	}
 }
