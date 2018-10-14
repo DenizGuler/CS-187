@@ -57,7 +57,7 @@ public class Fractal {
 			drawLine(p1, p2);
 			return;
 		}
-		// TODO
+
 		double dist = p1.distance(p2);
 		Turtle branch1 = new Turtle(p1, p2);
 		Turtle branch2 = new Turtle(p1, p2);
@@ -85,7 +85,6 @@ public class Fractal {
 			drawTriangle(p1, p2, p3);
 			return;
 		}
-		// TODO
 
 		double dist = p1.distance(p2);
 		//double dist23 = p2.distance(p3);
@@ -115,7 +114,7 @@ public class Fractal {
 			drawRectangle(p, a, a);
 			return;
 		}
-		// TODO
+
 		Point2D temp = new Point2D.Double();
 		drawSierpinskiCarpet(p, a/3, level - 1);
 
