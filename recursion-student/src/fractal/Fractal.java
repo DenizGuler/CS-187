@@ -1,5 +1,6 @@
 package fractal;
 
+import com.sun.xml.internal.ws.runtime.config.TubelineFeatureReader;
 import fractal.Turtle;
 
 import java.awt.*;
@@ -29,8 +30,25 @@ public class Fractal {
 			drawLine(p1, p2);
 			return;
 		}
-		// TODO
 		// Koch subdivision rule: ___ ->  _/\_
+		double dist = p1.distance(p2);
+		Turtle turt = new Turtle(p1, p2);
+
+		turt.move(dist/3);
+		Point2D p3 = turt.getPosition();
+
+		turt.turnLeft(60);
+		turt.move(dist/3);
+		Point2D p4 = turt.getPosition();
+
+		turt.turnRight(120);
+		turt.move(dist/3);
+		Point2D p5 = turt.getPosition();
+
+		drawKochCurve(p1, p3, level - 1);
+		drawKochCurve(p3, p4, level - 1);
+		drawKochCurve(p4, p5, level - 1);
+		drawKochCurve(p5, p2, level - 1);
 	}
 	
 	// Recursive method for drawing a fractal Tree given two points and the recursion level
@@ -40,6 +58,24 @@ public class Fractal {
 			return;
 		}
 		// TODO
+		double dist = p1.distance(p2);
+		Turtle branch1 = new Turtle(p1, p2);
+		Turtle branch2 = new Turtle(p1, p2);
+
+		branch1.move(dist/3); branch2.move(dist/3);;
+		Point2D p3 = branch1.getPosition();
+
+		branch1.turnLeft(60);
+		branch1.move(2*dist/3);
+		Point2D p4 = branch1.getPosition();
+
+		branch2.turnRight(15);
+		branch2.move(2*dist/3);
+		Point2D p5 = branch2.getPosition();
+
+		drawTree(p1, p3, 0);
+		drawTree(p3, p4, level - 1);
+		drawTree(p3, p5, level - 1);
 	}
 	
 	// Recursive method for drawing the Sierpinski Triangle given the three points
@@ -50,6 +86,26 @@ public class Fractal {
 			return;
 		}
 		// TODO
+
+		double dist = p1.distance(p2);
+		//double dist23 = p2.distance(p3);
+		//double dist13 = p1.distance(p3);
+		Turtle turt12 = new Turtle(p1, p2);
+		Turtle turt23 = new Turtle(p2, p3);
+		Turtle turt13 = new Turtle(p1, p3);
+
+		turt12.move(dist/2);
+		Point2D p4 = turt12.getPosition();
+
+		turt23.move(dist/2);
+		Point2D p5 = turt23.getPosition();
+
+		turt13.move(dist/2);
+		Point2D p6 = turt13.getPosition();
+
+		drawSierpinskiTriangle(p1, p4, p6, level - 1);
+		drawSierpinskiTriangle(p2, p4, p5, level - 1);
+		drawSierpinskiTriangle(p3, p5, p6, level - 1);
 	}
 	
 	// Recursive method for drawing the Sierpinski Carpet given the lower-left corner
@@ -60,6 +116,29 @@ public class Fractal {
 			return;
 		}
 		// TODO
+		Point2D temp = new Point2D.Double();
+		drawSierpinskiCarpet(p, a/3, level - 1);
+
+		temp.setLocation(p.getX(), p.getY() + a/3);
+		drawSierpinskiCarpet(temp, a/3, level - 1);
+
+		temp.setLocation(p.getX(), temp.getY() + a/3);
+		drawSierpinskiCarpet(temp, a/3, level - 1);
+
+		temp.setLocation(temp.getX() + a/3, temp.getY());
+		drawSierpinskiCarpet(temp, a/3, level - 1);
+
+		temp.setLocation(temp.getX() + a/3, temp.getY());
+		drawSierpinskiCarpet(temp, a/3, level - 1);
+
+		temp.setLocation(temp.getX(), p.getY());
+		drawSierpinskiCarpet(temp, a/3, level - 1);
+
+		temp.setLocation(temp.getX() , p.getY() + a/3);
+		drawSierpinskiCarpet(temp, a/3, level - 1);
+
+		temp.setLocation(temp.getX() - a/3, p.getY());
+		drawSierpinskiCarpet(temp, a/3, level - 1);
 	}
 	
 	// This method is left for you to experiment with creative fractals
