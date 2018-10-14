@@ -29,23 +29,37 @@ public class LargeInteger {
 	 *  Remember: the list nodes must be in reverse order as the characters in the string.
 	 */
 	public LargeInteger(String input) {
-		// TODO
+		for (int i = 0; i < input.length(); i++){
+			Integer a = input.charAt(i) - '0';
+			LLNode<Integer> curr = new LLNode<Integer>(a, head);
+			head = curr;
+			size++;
+		}
 	}
 	
 	/** Divide *this* large integer by 10 and return this.
 	 *  Assume integer division: for example, 23/10 = 2, 8/10 = 0 and so on.
 	 */
 	public LargeInteger divide10() {
-		// TODO
-		return null;
+		if (size < 2){
+			head = new LLNode<>(0, null);
+			return this;
+		}
+		head = head.link;
+		size--;
+		return this;
 	}
 	
 	/** Multiply *this* large integer by 10 and return this.
 	 *  For example, 23*10 = 230, 0*10 = 0 etc.
 	 */
 	public LargeInteger multiply10() {
-		// TODO
-		return null;
+		if (this.toString().equals("0"))
+			return this;
+		LLNode<Integer> zero = new LLNode<>(0, head);
+		head = zero;
+		size++;
+		return this;
 	}
 	
 	/** Returns a *new* LargeInteger object representing the sum of this large integer
@@ -54,8 +68,34 @@ public class LargeInteger {
 	 *  carry over at the highest digit (e.g. 9999+2=10001).
 	 */
 	public LargeInteger add(LargeInteger that) {
-		// TODO
-		return null;
+		int carry = 0;
+		String result = "";
+		LLNode<Integer> lcurr, scurr;
+		if (size >= that.size()) {
+			lcurr = head;
+			scurr = that.getList();
+		} else {
+			lcurr = that.getList();
+			scurr = head;
+		}
+		while (scurr != null){
+			int sum = scurr.data + lcurr.data + carry;
+			carry = sum / 10;
+			sum %= 10;
+			result = sum + result;
+			lcurr = lcurr.link;
+			scurr = scurr.link;
+		}
+		while (lcurr != null){
+			int sum = lcurr.data + carry;
+			carry = sum / 10;
+			sum %= 10;
+			result = sum + result;
+			lcurr = lcurr.link;
+		}
+		if (carry == 1)
+			result = 1 + result;
+		return new LargeInteger(result);
 	}
 	
 	/** Returns a new LargeInteger object representing the result of multiplying
@@ -64,8 +104,14 @@ public class LargeInteger {
 	 *  above to accomplish the 'multiply'.
 	 */
 	public LargeInteger multiply(int x) {
-		// TODO
-		return null;
+		LargeInteger result = this;
+		if (x == 0)
+			return new LargeInteger("0");
+		if (x == 1)
+			return add(new LargeInteger("0"));
+		for (int i = 1; i < x; i++)
+			result = this.add(result);
+		return result;
 	}
 
 	/** Recursive method that converts the list referenced by curr_node back to
@@ -74,8 +120,13 @@ public class LargeInteger {
 	 *  Hint: refer to the 'printing a list backwards' example we covered in lectures.
 	 */
 	private String toString(LLNode<Integer> curr_node) {
-		// TODO
-		return null;
+		String number = "";
+		LLNode<Integer> curr = head;
+		while (curr != null){
+			number = curr.data.toString() + number;
+			curr = curr.link;
+		}
+		return number;
 	}
 	
 	/** Convert this list back to a string representing the large integer.
