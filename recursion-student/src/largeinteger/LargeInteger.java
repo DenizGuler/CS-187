@@ -22,7 +22,7 @@ public class LargeInteger {
 	}
 	
 	/** Constructor that takes a String as input and constructs the linked list.
-	 *  You can assume that the input is guaranteed to be valid: i.e. every character
+	 *  You can assume that the input is guaranteed to b e valid: i.e. every character
 	 *  in the string is between '0' and '9', and the first character is never '0'
 	 *  (unless '0' is the only character in the string). You can use input.charAt(i)-'0'
 	 *  to convert the character at index i to the integer value of that digit.
