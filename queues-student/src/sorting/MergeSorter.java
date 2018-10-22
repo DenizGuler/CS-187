@@ -35,8 +35,15 @@ public class MergeSorter<T extends Comparable<T>> {
 		Queue<T> input = new Queue<T>(queue);
 		Queue<T> output1 = new Queue<T>();	// output queue 1		
 		Queue<T> output2 = new Queue<T>();	// output queue 2
-        	// TODO 1
-            return null;
+		// TODO 1
+		if (input.size() <= 1) {
+			return input;
+		}
+		divide(input, output1, output2);
+		output1 = mergeSort(output1);
+		output2 = mergeSort(output2);
+		Queue<T> merged = merge(output1, output2);
+		return merged;
 	}
 
 	/**
@@ -48,7 +55,12 @@ public class MergeSorter<T extends Comparable<T>> {
 	 * @param output2 a queue into which the other half of the elements in input should go
 	 */
 	void divide(Queue<T> input, Queue<T> output1, Queue<T> output2) {
-        	// TODO 2
+		// TODO 2
+		int half = input.size()/2;
+		for (int i = 0; i < half; i ++)
+			output1.enqueue(input.dequeue());
+		while (!input.isEmpty())
+			output2.enqueue(input.dequeue());
 	}
 	
 	/**
@@ -65,7 +77,21 @@ public class MergeSorter<T extends Comparable<T>> {
 	 */
 	Queue<T> merge(Queue<T> input1, Queue<T> input2) {
 		Queue<T> output = new Queue<T>();
-        	// TODO 3
-            return null;
+		// TODO 3
+
+		while (!input1.isEmpty() && !input2.isEmpty()) {
+			if (input1.peek().compareTo(input2.peek()) <= 0) {
+				output.enqueue(input1.dequeue());
+			} else {
+				output.enqueue(input2.dequeue());
+			}
+		}
+		if (input1.isEmpty())
+			while (!input2.isEmpty())
+				output.enqueue(input2.dequeue());
+		else
+			while (!input1.isEmpty())
+				output.enqueue(input1.dequeue());
+		return output;
 	}
 }

@@ -4,6 +4,8 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import java.util.NoSuchElementException;
+
 
 public class PublicUnboundedQueueInterfaceTest {
 	UnboundedQueueInterface<Integer> q;
@@ -97,4 +99,34 @@ public class PublicUnboundedQueueInterfaceTest {
 		assertEquals(1, r.size());
 	}
 
+	@Test
+	public void testLongEnqueue() throws Exception {
+		Queue<Integer> q = new Queue<>();
+		for (int i = 1; i < 11; i++)
+			q.enqueue(i);
+		for (int i = 1; i < 11; i++)
+			assertEquals(i ,(int)q.dequeue());
+	}
+
+	@Test
+	public void testReversed() throws Exception {
+		Queue<Integer> q = new Queue<>();
+		Queue<Integer> r = new Queue<>();
+		for (int i = 1; i < 6; i++)
+			q.enqueue(i);
+		for (int i = 5; i > 0; i--)
+			r.enqueue(i);
+		UnboundedQueueInterface<Integer> reved = q.reversed();
+		while (!reved.isEmpty())
+			assertEquals(r.dequeue(), reved.dequeue());
+	}
+
+	@Test(expected = NoSuchElementException.class)
+	public void testErrors() throws Exception {
+		Queue<Integer> q  = new Queue<>();
+		q.enqueue(1);
+		q.dequeue();
+		q.dequeue();
+
+	}
 }

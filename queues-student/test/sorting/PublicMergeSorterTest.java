@@ -57,7 +57,8 @@ public class PublicMergeSorterTest {
 		}
 		ms.divide(q, output1, output2);
 		assertTrue(((output1.size() == 5) && (output2.size() == 6)) ||
-				   ((output1.size() == 6) && (output2.size() == 5)));;
+				   ((output1.size() == 6) && (output2.size() == 5)));
+		int i = 0;
 	}
 
 	@Test
