@@ -46,7 +46,7 @@ public class Queue<T> implements UnboundedQueueInterface<T> {
 	@Override
 	public void enqueue(T element) {
 		// TODO 5
-		Node<T> node = new Node<>(element, null);
+		Node<T> node = new Node<>(element);
 		if (isEmpty()) {
 			node.next = node;
 			tail = node;
@@ -95,13 +95,24 @@ public class Queue<T> implements UnboundedQueueInterface<T> {
 		return rev;
 	}
 
-	private void recursiveReversed(Queue<T> copy){
+	private void recursiveReversed(Queue<T> copy) {
 		T temp;
 		if (!copy.isEmpty()){
 			temp = copy.dequeue();
 			recursiveReversed(copy);
 			this.enqueue(temp);
 		}
+	}
+
+	public String toString() {
+		return toString(tail.next);
+	}
+
+	private String toString(Node<T> head) {
+		String result = "";
+		if (head == tail)
+			return tail.data.toString();
+		return head.data.toString() + ", " + toString(head.next);
 	}
 }
 
@@ -111,6 +122,10 @@ class Node<T> {
 	public Node(T data) { this.data=data;}
 	public Node(T data, Node<T> next) {
 		this.data = data; this.next=next;
+	}
+
+	public String toString() {
+		return this.data.toString();
 	}
 }
 
